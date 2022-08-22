@@ -1,12 +1,14 @@
-Virtual Private Server Setup Guidelines
+Virtual Private Server Setup
 ========================
+These are some personal notes for my VPS instances, just in case I have to trace back errors. They might come in handy for you if you would like to set up a remote DNSspoof attack via a self-hosted Hak5 Cloud C2 environment and some self-hosted phishing sites as well.
 
-I am using an AWS VPS instances to run 
+Situation:
+I am using AWS VPS instances to run 
 
   + a Hak5 Cloud C2 environment and<p>
   + an Apache server to host multiple cloned web pages to be used in penetration testing scenarios for phishing attacks.
   
-However, any other VPS should be fine as well. Both of my AWS instances are reachable by indivual domains (and several instances of domain subfolders in case of the Apache2 server).
+However, any other VPS should be fine as well. Both of my AWS instances are reachable by indivual domains (and several instances of domain subfolders in case of the Apache server).
 
 ## Setup
 The instructions assume that a VPS instance has been set up with Ubuntu LTS. For any fresh Install, do these things first:
@@ -19,19 +21,18 @@ sudo apt update
 sudo do-release-upgrade
 sudo apt upgrade
 ```
-4. Download and install often needed software:
+4. Download and install software you'll need in any case:
 ```
 sudo apt install mc -y
 sudo apt install unzip
 sudo apt-get -y install python3-pip
 ```
-
 ### -> Cloud C2 Server for remote management of Hak5 devices
 Instructions start [here](https://www.youtube.com/watch?v=TIpx_ENurLY).
 
 ### -> Apache Server for phishing attacks
 1. Install Apache with `sudo apt-get install apache2`
-2. Install rewrite & php modules for Apache. Then restart Apache2:
+2. Install *Rewrite* & *PHP5* modules for Apache:
 ```
 sudo a2enmod rewrite
 sudo apt-get install libapache2-mod-php5
@@ -65,7 +66,7 @@ sudo systemctl restart apache2
 
 The phishing pages should already work now. You can test this by heading to `yourdomain.com/phishingpageXYZ`. However, they do not have an SSL certificate, yet, which most browsers will highlight as a potential risk for the user. Hence, we will acquire and apply one.
 
-UNSURE FROM HERE:
+UNSURE FROM HERE / NOT TESTED:
 
 10. Install *Let's Encrypt* (free SSL certificates via Certbot) on your VPS instance:
 ```
@@ -75,7 +76,10 @@ sudo /opt/certbot/bin/pip install --upgrade pip
 sudo /opt/certbot/bin/pip install certbot certbot-apache
 sudo ln -s /opt/certbot/bin/certbot /usr/bin/certbot
 ```
-11. Create a SSL certificate for your new virtual host with help of *Let's Encrypt* by entering `sudo certbot --apache -d yourdomain.com -d www.yourdomain.com`.
+11. Create a SSL certificate for your new virtual host with help of *Let's Encrypt*:
+```
+sudo certbot --apache -d yourdomain.com -d www.yourdomain.com
+```
 
 
 <br></br>
